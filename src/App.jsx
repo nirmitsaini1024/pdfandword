@@ -3,33 +3,61 @@ import PDFViewer from "./components/pdf-viewer";
 import ReferenceTexts from "./components/reference-texts";
 import WordViewer from "./components/WebViewer";
 
+// New component for the full page popup
+const FullPagePopup = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+      <div className="bg-white w-11/12 max-w-[1400px] h-5/6 rounded-lg shadow-xl relative overflow-hidden">
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl z-10"
+        >
+          &times;
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 export default function App() { 
   const [searchPluginInstance1, setSearchPluginInstance1] = useState(null);
   const [searchPluginInstance, setSearchPluginInstance] = useState(null);
   const [wordSearchResults, setWordSearchResults] = useState([]);
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   
+  // State for full page popup
+  const [isFullPagePopupOpen, setIsFullPagePopupOpen] = useState(false);
+
+  // Open full page popup
+  const openFullPagePopup = () => {
+    setIsFullPagePopupOpen(true);
+  };
+
+  // Close full page popup
+  const closeFullPagePopup = () => {
+    setIsFullPagePopupOpen(false);
+  };
+
   // Callback for handling search in the Word viewer
   const handleSearch = (searchQuery) => {
     console.log(`Searching for: ${searchQuery} in Word documents`);
     setCurrentSearchTerm(searchQuery);
     
     // Here you would implement actual Word document search
-    // For now, we'll just set an empty array since we're focusing on PDF search
     setWordSearchResults([]);
-    
-    // If you integrate actual Word search in the future, replace the empty array
-    // with real search results from your Word component
   };
 
   // Callback for navigating to Word result
   const onNavigateToWordResult = (match) => {
     console.log("Navigating to Word result: ", match);
-    // Implement logic to navigate in your Word viewer when needed
   };
 
-  return (
-    <div className="flex flex-col h-screen bg-white text-gray-800">
+  // Main content render function
+  const renderMainContent = () => (
+    <div className="flex flex-col h-full bg-white text-gray-800">
       <header className="border-b border-gray-200 p-4">
         <h1 className="text-xl font-semibold text-blue-500">Compare Final vs working copy</h1>
       </header>
@@ -96,6 +124,28 @@ export default function App() {
           </div>
         </div>
       </main>
+    </div>
+  );
+
+  return (
+    <div>
+      {/* Initial view with Open button */}
+      <div className="p-4">
+        <button 
+          onClick={openFullPagePopup}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Open Documents
+        </button>
+      </div>
+
+      {/* Full Page Popup */}
+      <FullPagePopup 
+        isOpen={isFullPagePopupOpen}
+        onClose={closeFullPagePopup}
+      >
+        {renderMainContent()}
+      </FullPagePopup>
     </div>
   );
 }
