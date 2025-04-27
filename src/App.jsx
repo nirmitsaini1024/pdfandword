@@ -31,7 +31,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen bg-white text-gray-800">
       <header className="border-b border-gray-200 p-4">
-        <h1 className="text-xl font-semibold text-blue-500">PDF Viewer and Web Viewer</h1>
+        <h1 className="text-xl font-semibold text-blue-500">Compare Final vs working copy</h1>
       </header>
 
       <main className="flex flex-1 overflow-hidden">
@@ -39,7 +39,7 @@ export default function App() {
           {/* PDF Viewer Panel */}
           <div className="border-r border-gray-200 h-full overflow-hidden">
             <div className="border-b border-gray-200 p-4">
-              <h2 className="text-lg font-medium">PDF Viewer</h2>
+              <h2 className="text-lg font-medium">Final Copy</h2>
               {currentSearchTerm && (
                 <div className="text-xs text-gray-500 mt-1">
                   Showing highlights for: "{currentSearchTerm}"
@@ -56,7 +56,7 @@ export default function App() {
           {/* WebViewer Panel */}
           <div className="h-full overflow-hidden">
             <div className="border-b border-gray-200 p-4">
-              <h2 className="text-lg font-medium">WebViewer Component</h2>
+              <h2 className="text-lg font-medium">Working Copy</h2>
             </div>
             <div className="h-[calc(100%-57px)]">
               <WordViewer onSetSearchPluginInstance={setSearchPluginInstance1}/>
