@@ -1,11 +1,10 @@
-"use client";
-
 import React, { Suspense, useState } from "react";
 import PDFViewer from "./components/pdf-viewer";
 import ReferenceTexts from "./components/reference-texts";
 import WordViewer from "./components/WebViewer";
 
 export default function App() { 
+  const [searchPluginInstance1, setSearchPluginInstance1] = useState(null);
   const [searchPluginInstance, setSearchPluginInstance] = useState(null);
   const [wordSearchResults, setWordSearchResults] = useState([]);
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
@@ -60,7 +59,7 @@ export default function App() {
               <h2 className="text-lg font-medium">WebViewer Component</h2>
             </div>
             <div className="h-[calc(100%-57px)]">
-              <WordViewer />
+              <WordViewer onSetSearchPluginInstance={setSearchPluginInstance1}/>
             </div>
           </div>
 
@@ -75,12 +74,20 @@ export default function App() {
             <div className="h-[calc(100%-57px)] overflow-hidden">
               <Suspense fallback={<div className="p-4">Loading search panel...</div>}>
                 {searchPluginInstance ? (
+                  <div className="">
                   <ReferenceTexts
                     searchPluginInstance={searchPluginInstance}
                     wordViewerResults={wordSearchResults}
                     onSearch={handleSearch}
                     onNavigateToWordResult={onNavigateToWordResult}
                   />
+                  <ReferenceTexts
+                    searchPluginInstance={searchPluginInstance1}
+                    wordViewerResults={wordSearchResults}
+                    onSearch={handleSearch}
+                    onNavigateToWordResult={onNavigateToWordResult}
+                  />
+                  </div>
                 ) : (
                   <div className="p-4">Loading search plugin...</div>
                 )}
