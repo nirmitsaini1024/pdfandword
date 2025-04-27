@@ -11,7 +11,7 @@ import '@react-pdf-viewer/search/lib/styles/index.css';
 
 const PDFViewer = ({ onSetSearchPluginInstance }) => {
   // Replace with the correct URL or path to your PDF file
-  const fileUrl = '/report.pdf';
+  const fileUrl = '/sample.pdf';
 
   // Create the search plugin instance
   const searchPluginInstance = searchPlugin({

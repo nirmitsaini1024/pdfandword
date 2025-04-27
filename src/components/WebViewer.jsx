@@ -7,7 +7,7 @@ export default function WebViewerComponent() {
   useEffect(() => {
     WebViewer({
       path: '/lib/webviewer',
-      initialDoc: '/report-biosensor.docx', // Set your DOCX file path here
+      initialDoc: '/sample.docx', // Set your DOCX file path here
       licenseKey: 'demo:1745619411379:6100596e0300000000cec4e228950dd6be8e57b6f5fcff99172249fc5f',
     }, ref.current)
       .then((instance) => {
