@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { MinimalButton, Spinner, TextBox } from '@react-pdf-viewer/core';
 import { NextIcon, PreviousIcon } from '@react-pdf-viewer/search';
@@ -20,6 +20,7 @@ const ReferenceTexts = ({
   const [pdfMatches, setPdfMatches] = useState([]);
   const [allMatches, setAllMatches] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const resultsContainerRef = useRef(null);
 
   // Combine PDF and Word results whenever either changes
   useEffect(() => {
@@ -31,16 +32,19 @@ const ReferenceTexts = ({
     });
     setAllMatches(combined);
     setIsSearching(false);
+
+    // Scroll to top of results when new matches are found
+    setTimeout(() => {
+      if (resultsContainerRef.current) {
+        resultsContainerRef.current.scrollTop = 0;
+      }
+    }, 0);
   }, [pdfMatches, wordViewerResults]);
 
   const renderMatchSample = (match) => {
     if (!match) return null;
     
     if (match.source === "pdf") {
-      //  match.startIndex    match.endIndex
-      //      |                       |
-      //      ▼                       ▼
-      //  ....[_____props.keyword_____]....
       const wordsBefore = match.pageText.substr(match.startIndex - 20, 20);
       let words = wordsBefore.split(' ');
       words.shift();
@@ -178,9 +182,18 @@ const ReferenceTexts = ({
                     </div>
 
                     {/* Results List */}
-                    <div className="flex-1 overflow-auto p-4 border-t border-gray-200">
+                    <div 
+                      ref={resultsContainerRef}
+                      className="flex-1 overflow-y-auto p-4 border-t border-gray-200"
+                      style={{ 
+                        maxHeight: 'calc(100vh - 200px)', // Adjust height based on available space
+                      }}
+                    >
                       {allMatches.map((match, index) => (
-                        <div key={match.id} className="mb-4">
+                        <div 
+                          key={match.id} 
+                          className="mb-4 last:mb-0"
+                        >
                           <div className="flex justify-between mb-2">
                             <div>#{index + 1}</div>
                             <div className="text-xs text-gray-500">
