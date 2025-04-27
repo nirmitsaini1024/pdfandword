@@ -2,10 +2,10 @@
 
 import React, { Suspense, useState } from "react";
 import PDFViewer from "./components/pdf-viewer";
-import WebViewerComponent from "./components/WebViewer";
 import ReferenceTexts from "./components/reference-texts";
+import WordViewer from "./components/WebViewer";
 
-export default function App() {
+export default function App() { 
   const [searchPluginInstance, setSearchPluginInstance] = useState(null);
   const [wordSearchResults, setWordSearchResults] = useState([]);
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
@@ -60,7 +60,7 @@ export default function App() {
               <h2 className="text-lg font-medium">WebViewer Component</h2>
             </div>
             <div className="h-[calc(100%-57px)]">
-              <WebViewerComponent />
+              <WordViewer />
             </div>
           </div>
 

@@ -1,27 +1,44 @@
-import WebViewer from "@pdftron/webviewer";
-import { useEffect, useRef } from "react";
+import React, { useEffect } from 'react';
+import { 
+  Worker, 
+  Viewer, 
+  SpecialZoomLevel, 
+  ScrollMode
+} from '@react-pdf-viewer/core';
+import { searchPlugin } from '@react-pdf-viewer/search';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/search/lib/styles/index.css';
 
-export default function WebViewerComponent() {
-  const ref = useRef(null);
+const WordViewer = ({ onSetSearchPluginInstance }) => {
+  // Replace with the correct URL or path to your PDF file
+  const fileUrl = '/sample.pdf';
 
+  // Create the search plugin instance
+  const searchPluginInstance = searchPlugin({
+    // Enable keyword highlighting
+    enableHighlight: true
+  });
+
+  // Pass the search plugin instance to the parent component
   useEffect(() => {
-    WebViewer({
-      path: '/lib/webviewer',
-      initialDoc: '/sample.docx', // Set your DOCX file path here
-      licenseKey: 'demo:1745619411379:6100596e0300000000cec4e228950dd6be8e57b6f5fcff99172249fc5f',
-    }, ref.current)
-      .then((instance) => {
-        // Apply zoom once the document is loaded
-        instance.docViewer.on('documentLoaded', () => {
-          // Zoom to 82% by default (82% = 0.82)
-          instance.setZoom(0.82);  // Use setZoom instead of zoomTo
-        });
-      });
-  }, []);
+    if (onSetSearchPluginInstance) {
+      onSetSearchPluginInstance(searchPluginInstance);
+    }
+  }, [onSetSearchPluginInstance]);
 
   return (
-    <div ref={ref} style={{ height: '100%' }}>
-      {/* WebViewer content will be rendered here */}
+    <div className="h-full w-full overflow-auto">
+      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+        <Viewer
+          fileUrl={fileUrl}
+          defaultScale={SpecialZoomLevel.PageWidth}
+          scrollMode={ScrollMode.Vertical}
+          plugins={[searchPluginInstance]}
+          onDocumentLoad={() => console.log("PDF document loaded successfully")}
+        />
+      </Worker>
     </div>
   );
-}
+};
+
+export default WordViewer;
